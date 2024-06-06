@@ -1,3 +1,4 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
 import { registerUser, authenticateUser } from '@src/services/auth.service';
@@ -5,8 +6,8 @@ import { registerUser, authenticateUser } from '@src/services/auth.service';
 export const registerHandler = async (req: Request, res: Response) => {
   try {
     const { name, email, password, role } = req.body;
-    const user = await registerUser(name, email, password, role);
-    res.status(201).json(user);
+    const { user, token } = await registerUser(name, email, password, role);
+    res.status(201).json({ user, token });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }

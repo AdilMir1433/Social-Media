@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import mongoose from 'mongoose';
 import { logger } from '@src/utils/logger';
 

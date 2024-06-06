@@ -2,6 +2,20 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User } from '@src/models/user.model';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const generateToken = (user: any) => {
+  const payload = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  };
+
+  return jwt.sign(payload, process.env.JWT_SECRET || 'your_jwt_secret_key', {
+    expiresIn: '1h',
+  });
+};
+
 export const registerUser = async (
   name: string,
   email: string,
@@ -23,7 +37,9 @@ export const registerUser = async (
   });
 
   await newUser.save();
-  return newUser;
+
+  const token = generateToken(newUser);
+  return { user: newUser, token };
 };
 
 export const authenticateUser = async (email: string, password: string) => {
@@ -37,15 +53,6 @@ export const authenticateUser = async (email: string, password: string) => {
     throw new Error('Invalid email or password');
   }
 
-  const payload = {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
-  };
-
-  const token = jwt.sign(payload, process.env.JWT_SECRET || ' ', {
-    expiresIn: '1h',
-  });
+  const token = generateToken(user);
   return token;
 };

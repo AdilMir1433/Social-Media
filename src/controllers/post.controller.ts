@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable eqeqeq */
 /* eslint-disable consistent-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Request, Response } from 'express';
@@ -33,6 +35,12 @@ export const getPostByIdHandler = async (req: Request, res: Response) => {
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
+    const userId = (req.user as any)._id;
+    const postId = post.user._id;
+
+    if (!userId.equals(postId)) {
+      return res.status(403).json({ error: 'Unauthorized access' });
+    }
     res.status(200).json(post);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -45,6 +53,12 @@ export const updatePostHandler = async (req: Request, res: Response) => {
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
+    const userId = (req.user as any)._id;
+    const postId = post.user._id;
+
+    if (!userId.equals(postId)) {
+      return res.status(403).json({ error: 'Unauthorized access' });
+    }
     res.status(200).json(post);
   } catch (error: any) {
     res.status(500).json({ error: error.message });
@@ -56,6 +70,12 @@ export const deletePostHandler = async (req: Request, res: Response) => {
     const post = await deletePost(req.params.id);
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
+    }
+    const userId = (req.user as any)._id;
+    const postId = post.user._id;
+
+    if (!userId.equals(postId)) {
+      return res.status(403).json({ error: 'Unauthorized access' });
     }
     res.status(200).json({ message: 'Post deleted successfully' });
   } catch (error: any) {

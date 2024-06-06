@@ -5,17 +5,12 @@ import {
 } from '@src/controllers/auth.controller';
 import { Router } from 'express';
 import { validateFields } from '@src/middleware/validation.middleware';
-import { body } from 'express-validator';
+import {
+  registrationValidationRules,
+  loginValidationRules,
+} from '@src/validators/auth.validator';
 
 const router = Router();
-
-const registrationValidationRules = [
-  body('name').notEmpty().withMessage('Name is required'),
-  body('email').isEmail().withMessage('Invalid email'),
-  body('password')
-    .isLength({ min: 6 })
-    .withMessage('Password must be at least 6 characters long'),
-];
 
 router.post(
   '/register',
@@ -23,6 +18,6 @@ router.post(
   validateFields,
   registerHandler,
 );
-router.post('/login', loginHandler);
+router.post('/login', loginValidationRules, validateFields, loginHandler);
 
 export default router;
