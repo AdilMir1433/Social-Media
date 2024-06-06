@@ -67,7 +67,7 @@ export const updatePostHandler = async (req: Request, res: Response) => {
 
 export const deletePostHandler = async (req: Request, res: Response) => {
   try {
-    const post = await deletePost(req.params.id);
+    const post = await getPostById(req.params.id);
     if (!post) {
       return res.status(404).json({ error: 'Post not found' });
     }
@@ -75,9 +75,10 @@ export const deletePostHandler = async (req: Request, res: Response) => {
     const { role } = req.user as any;
     const postId = post.user._id;
 
-    if (!userId.equals(postId) && !role.equals('admin')) {
+    if (!userId.equals(postId) && !(role === 'admin')) {
       return res.status(403).json({ error: 'Unauthorized access' });
     }
+    await deletePost(req.params.id);
     res.status(200).json({ message: 'Post deleted successfully' });
   } catch (error: any) {
     res.status(500).json({ error: error.message });

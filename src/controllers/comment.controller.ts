@@ -58,7 +58,7 @@ export const deleteCommentHandler = async (req: Request, res: Response) => {
     const commentUserId = comment.user._id;
     const { role } = req.user as any;
 
-    if (!userId.equals(commentUserId) && !role.equals('admin')) {
+    if (!userId.equals(commentUserId) && !(role === 'admin')) {
       return res.status(403).json({ error: 'Unauthorized access' });
     }
     res.status(200).json({ message: 'Comment deleted successfully' });
