@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 /* eslint-disable consistent-return */
 /* eslint-disable import/no-extraneous-dependencies */
 // src/middleware/validationMiddleware.ts
