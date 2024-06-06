@@ -17,12 +17,12 @@ const router = Router();
 export const createPostValidationRules = [
   body('title').notEmpty().withMessage('Title is required'),
   body('content').notEmpty().withMessage('Content is required'),
-  body('userId')
+  body('user')
     .notEmpty()
     .withMessage('User ID is required')
-    .custom(async (userId) => {
-      const user = await User.findById(userId);
-      if (!user) {
+    .custom(async (user) => {
+      const foundUser = await User.findById(user);
+      if (!foundUser) {
         throw new Error('User ID does not exist');
       }
       return true;
