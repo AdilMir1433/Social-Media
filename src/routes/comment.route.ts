@@ -10,11 +10,13 @@ import {
   createCommentValidationRules,
   commentIdValidationRules,
 } from '@src/validators/comment.validator';
+import { authenticate } from '@src/middleware/auth.middleware';
 
 const router = Router();
 
 router.post(
   '/',
+  authenticate,
   createCommentValidationRules,
   validateFields,
   createCommentHandler,
@@ -27,12 +29,14 @@ router.get(
 );
 router.put(
   '/:id',
+  authenticate,
   commentIdValidationRules,
   validateFields,
   updateCommentHandler,
 );
 router.delete(
   '/:id',
+  authenticate,
   commentIdValidationRules,
   validateFields,
   deleteCommentHandler,
