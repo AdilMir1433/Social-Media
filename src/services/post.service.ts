@@ -22,6 +22,6 @@ export const updatePost = async (id: string, post: Partial<IPost>) => {
 };
 
 export const deletePost = async (id: string) => {
-  const deletedPost = await Post.findByIdAndDelete(id);
+  const deletedPost = await Post.findOneAndDelete({ _id: id });
   return deletedPost;
 };

@@ -1,4 +1,7 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable func-names */
 import mongoose, { Schema, Document } from 'mongoose';
+import { Comment } from './comment.model';
 
 export interface IPost extends Document {
   title: string;
@@ -14,5 +17,11 @@ const PostSchema: Schema = new Schema(
   },
   { timestamps: true },
 );
+
+PostSchema.pre('findOneAndDelete', async function (next) {
+  const postId = this.getQuery()._id;
+  await Comment.deleteMany({ post: postId });
+  next();
+});
 
 export const Post = mongoose.model<IPost>('Post', PostSchema);
