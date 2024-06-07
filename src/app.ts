@@ -9,7 +9,7 @@ import commentRoutes from '@src/routes/comment.route';
 const app = express();
 app.use(bodyParser.json());
 app.use('/api/auth', authRoutes);
-app.use('/api/post', postRoutes);
-app.use('/api/comment', commentRoutes);
+app.use('/api/posts', postRoutes);
+app.use('/api/comments', commentRoutes);
 
 export { app };

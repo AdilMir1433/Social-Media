@@ -3,7 +3,7 @@ module.exports = {
   plugins: ['@typescript-eslint', 'prettier'],
   overrides: [
     {
-      files: ['*.ts', '*.tsx'],
+      files: ['*.ts', '*.tsx', '!swagger.ts'],
       extends: [
         'airbnb-base',
         'airbnb-typescript/base',
