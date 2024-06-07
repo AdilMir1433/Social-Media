@@ -5,8 +5,18 @@ import bodyParser from 'body-parser';
 import authRoutes from '@src/routes/auth.route';
 import postRoutes from '@src/routes/post.route';
 import commentRoutes from '@src/routes/comment.route';
+import cors from 'cors';
 
 const app = express();
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
 app.use(bodyParser.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);

@@ -3,6 +3,7 @@ import 'module-alias/register';
 import { app } from '@src/app';
 import { connectDB } from '@src/config';
 import * as dotenv from 'dotenv';
+
 import swaggerSpec from '../swagger';
 
 dotenv.config();
