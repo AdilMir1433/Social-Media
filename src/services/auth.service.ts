@@ -54,5 +54,5 @@ export const authenticateUser = async (email: string, password: string) => {
   }
 
   const token = generateToken(user);
-  return token;
+  return { user, token };
 };

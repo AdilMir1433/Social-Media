@@ -16,8 +16,8 @@ export const registerHandler = async (req: Request, res: Response) => {
 export const loginHandler = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    const token = await authenticateUser(email, password);
-    res.status(200).json({ token });
+    const { user, token } = await authenticateUser(email, password);
+    res.status(200).json({ user, token });
   } catch (error: any) {
     res.status(400).json({ error: error.message });
   }
