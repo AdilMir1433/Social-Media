@@ -1,10 +1,20 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import request from 'supertest';
-import { expect } from 'chai';
+import mongoose from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 import { testApp } from '../test.setup';
 
 describe('Auth Routes', () => {
   describe('POST /api/auth/register', () => {
+    beforeAll(async () => {
+      const mongoServer = await MongoMemoryServer.create();
+      await mongoose.connect(mongoServer.getUri());
+    });
+
+    afterAll(async () => {
+      await mongoose.disconnect();
+      await mongoose.connection.close();
+    });
     it('should register a new user', async () => {
       const res = await request(testApp).post('/api/auth/register').send({
         name: 'Test User',
@@ -13,8 +23,8 @@ describe('Auth Routes', () => {
         role: 'user',
       });
 
-      expect(res.status).to.equal(201);
-      expect(res.body).to.have.property('token');
+      expect(res.status).toBe(201);
+      expect(res.body).toHaveProperty('token');
     });
 
     it('should not register a user with an existing email', async () => {
@@ -32,12 +42,21 @@ describe('Auth Routes', () => {
         role: 'user',
       });
 
-      expect(res.status).to.equal(400);
-      expect(res.body).to.have.property('error', 'User already exists');
+      expect(res.status).toBe(400);
+      expect(res.body).toHaveProperty('error', 'User already exists');
     });
   });
 
   describe('POST /api/auth/login', () => {
+    beforeAll(async () => {
+      const mongoServer = await MongoMemoryServer.create();
+      await mongoose.connect(mongoServer.getUri());
+    });
+
+    afterAll(async () => {
+      await mongoose.disconnect();
+      await mongoose.connection.close();
+    });
     it('should login an existing user', async () => {
       await request(testApp).post('/api/auth/register').send({
         name: 'Test User',
@@ -51,8 +70,8 @@ describe('Auth Routes', () => {
         password: 'password123',
       });
 
-      expect(res.status).to.equal(200);
-      expect(res.body).to.have.property('token');
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty('token');
     });
 
     it('should not login a non-existing user', async () => {
@@ -61,8 +80,8 @@ describe('Auth Routes', () => {
         password: 'password123',
       });
 
-      expect(res.status).to.equal(400);
-      expect(res.body).to.have.property('error', 'Invalid email or password');
+      expect(res.status).toBe(400);
+      expect(res.body).toHaveProperty('error', 'Invalid email or password');
     });
   });
 });
